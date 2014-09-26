@@ -13,7 +13,6 @@ var OkCorgiApp = function() {
 
   function showNextCorgi() {
     var currentCorgiEl = $("li.corgi.active");
-
     if (currentCorgiEl.next().length > 0) {
       // Remove the class of hidden from the next corgi
       currentCorgiEl.next().removeClass("hidden").addClass("active");
@@ -21,7 +20,6 @@ var OkCorgiApp = function() {
     else {
       alert("No more Corgis!");
     }
-
     // Remove active corgi from candidates
     currentCorgiEl.remove();
   }
@@ -30,39 +28,31 @@ var OkCorgiApp = function() {
   $(".choose-corgi").on("click", function() {
 
     var elId = $(this).attr("id");
-    var corgi = $("li.corgi.active");
+    var corgi = $("li.active");
     var containerSelector = "";
+    var match = "";
 
     if (elId === "paw-left") {
       containerSelector = "#misses";
-        $.ajax({
-          type: "POST",
-          dataType: 'json',
-          url: '/corgis/'+ corgi.data("corgi-id"),
-          data: {_method: "put", corgi: { match: false } },
-          success: function () {
-            console.log("success");
-          },
-          error: function() {
-            console.log("didn't work");
-          },
-        });
-       }
+      match = false;
+      }
     else {
       containerSelector = "#matches";
-        $.ajax({
-          type: "POST",
-          url: '/corgis/'+ corgi.data("corgi-id"),
-          data: { _method: 'put', corgi: { match: true } },
-          success: function () {
-            console.log("success");
-          },
-          error: function() {
-            console.log("didn't work");
-          },
-          dataType: 'json'
-          });
-        }
+      match = true;
+    };
+    // Ajax post request to update corgi match attribute true or false
+    $.ajax({
+      type: "PATCH",
+      dataType: 'json',
+      url: '/corgis/'+ corgi.data("corgi-id"),
+      data: { corgi: { match: match } },
+      success: function () {
+        console.log("success");
+      },
+      error: function() {
+        console.log("didn't work");
+      },
+        });
     // Append thumbnail list item to the correct list
     $(containerSelector + " ul").append(createCorgiThumbnail());
 
