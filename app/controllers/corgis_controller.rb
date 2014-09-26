@@ -5,6 +5,8 @@ class CorgisController < ApplicationController
   # GET /corgis.json
   def index
     @corgis = Corgi.all
+    @corgiMatch = Corgi.where(match: true)
+    @corgiMiss = Corgi.where(match: false)
   end
 
   # GET /corgis/1
@@ -36,11 +38,11 @@ class CorgisController < ApplicationController
   # PATCH/PUT /corgis/1
   # PATCH/PUT /corgis/1.json
   def update
-    if @corgi.update(corgi_params)
-      redirect_to @corgi, notice: 'Corgi was successfully updated.'
-    else
-      render :edit
-    end
+    #if @corgi.update(corgi_params)
+    #  redirect_to @corgi, notice: 'Corgi was successfully updated.'
+    # else
+    #   render :edit
+    #end
   end
 
   # DELETE /corgis/1

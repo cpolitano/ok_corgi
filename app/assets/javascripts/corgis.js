@@ -30,16 +30,40 @@ var OkCorgiApp = function() {
   $(".choose-corgi").on("click", function() {
 
     var elId = $(this).attr("id");
+    var corgi = $("li.corgi.active");
     var containerSelector = "";
 
     if (elId === "paw-left") {
       containerSelector = "#misses";
-    }
+        $.ajax({
+          type: "POST",
+          dataType: 'json',
+          url: '/corgis/'+ corgi.data("corgi-id"),
+          data: {_method: "put", corgi: { match: false } },
+          success: function () {
+            console.log("success");
+          },
+          error: function() {
+            console.log("didn't work");
+          },
+        });
+       }
     else {
       containerSelector = "#matches";
-    }
-
-    // Append thumbnail list item to the #matches list
+        $.ajax({
+          type: "POST",
+          url: '/corgis/'+ corgi.data("corgi-id"),
+          data: { _method: 'put', corgi: { match: true } },
+          success: function () {
+            console.log("success");
+          },
+          error: function() {
+            console.log("didn't work");
+          },
+          dataType: 'json'
+          });
+        }
+    // Append thumbnail list item to the correct list
     $(containerSelector + " ul").append(createCorgiThumbnail());
 
     showNextCorgi();
